@@ -1,60 +1,49 @@
-import java.util.*;
-import java.io.*;
-import java.lang.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-public class Main{
-    static HashMap<Integer,Integer> city;
-    static int[] fuel;
-    static int N;
-    static int fuelSum=0;
-    static int[] visited;
-    static int Ans = 0;
-    public static void main(String[]args) throws IOException{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
+public class Main {
 
-        city = new HashMap<>();
-        fuel=new int[N+1];
-        fuel[0]=0;
-        StringTokenizer f = new StringTokenizer(br.readLine());
-        for(int i=1;i<=N-1;i++){
-            int cur=Integer.parseInt(f.nextToken());
-            fuel[i]=cur;
-            fuelSum+=cur;
-        }
-        StringTokenizer c = new StringTokenizer(br.readLine());
-        for(int i=1;i<=N-1;i++){
-            int cur=Integer.parseInt(c.nextToken());
-            city.put(i,cur);
-        }
+	static int N;
+	static long[] street;
+	static long[] country;
+	static long ans;
+	
+	public static void main(String[] args) throws IOException {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        List<Integer> citys = new ArrayList<>(city.keySet());
+		N = Integer.parseInt(br.readLine());
+		
+		street = new long[N-1];
+		country = new long[N];
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		StringTokenizer str = new StringTokenizer(br.readLine());
+		
+		for(int i = 0 ; i < N-1 ; i++) {
+			street[i] = Integer.parseInt(st.nextToken());
+		}
+		for(int i = 0 ; i < N ; i++) {
+			country[i] = Integer.parseInt(str.nextToken());
+		}
+		
+		long gas = country[0];
+		ans = country[0]*street[0];
+		
+		for(int i = 1 ; i < country.length-1 ; i++) {
+			if(gas > country[i]) {
+				gas = country[i];
+				ans += gas*street[i];
+			}else {
+				ans += gas*street[i];
+			}
+		}
 
-        citys.sort(new Comparator<Integer>(){
-            @Override
-            public int compare(Integer o1, Integer o2){
-                return city.get(o1).compareTo(city.get(o2));
-            }
-        });
-
-        visited = new int[N+1];
-        int n=0;
-        int totalSum=0;
-        while(fuelSum>0){
-            int sum=0;
-            int start = citys.get(n);
-            for(int i=start;i<=N-1;i++){
-                if(visited[i]==1)continue;
-                sum+=fuel[i];
-                visited[i]=1;
-            }
-            totalSum+=sum;
-            Ans+= sum*(city.get(start));
-            n++;
-            if(totalSum==fuelSum) break;
-        }
-
-        System.out.println(Ans);
-        br.close();
-    }
+		System.out.println(ans);
+		
+		}
+	
 }
