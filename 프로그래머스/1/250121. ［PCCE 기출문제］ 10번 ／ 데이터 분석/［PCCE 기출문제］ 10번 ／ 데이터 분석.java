@@ -23,11 +23,12 @@ class Solution {
         int i=0;
         int ans_i=0;
         while(i>=0){
-            
+            //System.out.print(data[i])
             if(data[i][getindex(ext)]<val_ext){
                 for(int k=0;k<4;k++){
-                    System.out.print(data[i][k]+" ");
+                    //System.out.print(data[i][k]+" ");
                     answer[ans_i][k]=data[i][k];
+                    System.out.print(answer[ans_i][k]+" ");
                 }
                 System.out.println();
                 ans_i++;
@@ -45,7 +46,7 @@ class Solution {
         else if(a.equals("date")){
             return 1;
         }
-        else if(a.equals("maximum")){
+        else if(a.equals("maximun")){
             return 2;
         }
         else{
