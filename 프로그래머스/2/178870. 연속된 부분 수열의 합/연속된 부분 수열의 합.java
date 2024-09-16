@@ -3,45 +3,39 @@ import java.io.*;
 import java.lang.*;
 
 class Solution {
-    public int[] solution(int[] sequence, int k) {
-        int[] answer = {-1,-1};
-        int size = sequence.length;
+    public int[] solution(int[] sequence, int k) throws IOException{
         
-        int start =0;
-        int end =-1;
-        int len =size;
+        int left = 0;
+        int right = -1;
+        int sLeft = 0;
+        int sRight =0;
+        int length = 1000001;
         
         int sum=0;
-        while(true){
+        
+        while(right<sequence.length && left < sequence.length){            
             if(sum<k){
-                end+=1;
-                if(end>=size){
-                    break;
+                right++;
+                if(right<sequence.length){
+                    sum+=sequence[right];
                 }
-                sum+=sequence[end];
+            }
+            else if(sum>k){
+                sum-=sequence[left];
+                left++;
             }
             else{
-                sum-=sequence[start];
-                if(start>=size){
-                    break;
+                if(right-left<length){
+                    length = right-left;
+                    sLeft=left;
+                    sRight=right;
                 }
-                start+=1;
+                sum-=sequence[left++];
             }
-            if(sum==k){
-                if(end-start<len){
-                    answer[0]=start;
-                    answer[1]=end;
-                    len=end-start;
-                }
-                else if(end-start==len){
-                    if(start<answer[0]){
-                        answer[0]=start;
-                        answer[1]=end;
-                    }
-                }
-            }
+            
         }
-
-        return answer;
+        return new int[] {sLeft, sRight};
+        
     }
+    
 }
