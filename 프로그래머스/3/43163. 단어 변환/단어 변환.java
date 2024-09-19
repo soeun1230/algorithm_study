@@ -2,69 +2,53 @@ import java.util.*;
 import java.lang.*;
 import java.io.*;
 
-public class arr{
-    int idx;
-    String w;
-    public arr(int idx, String w){
-        this.idx= idx;
-        this.w=w;
-    }
-}
-
 class Solution {
     public int[] visited;
-    public String[] word;
-    public int n,m;
-    public String tar;
-    public String beg;
+    public int n;
+    public int answer;
     
     public int solution(String begin, String target, String[] words) {
-        m=words.length;
-        n=words[0].length();
+        n = words.length;
+        visited = new int[n];
         
-        word = words;
-        visited = new int[m+1];
-        tar=target;
-        beg = begin;
-        
-        return bfs();
-        
-    }
-    
-    public int validCheck(String w, String t){
-        int cnt=0;
+        int min = 50;
         for(int i=0;i<n;i++){
-            if(w.charAt(i)!=t.charAt(i)){
-                cnt++;
-            }
+            int ans = bfs(i,begin, target, words);
+            if(ans>0 && min>ans) min=ans;
         }
-        if(cnt==1){
-            return 1;
-        }
+        if(min!=50) return min;
         return 0;
     }
-    public int bfs(){
-        Queue<arr> que = new LinkedList<>();
-        arr arr1 = new arr(0, beg);
-        que.offer(arr1);
-        visited[0]=0;
-   
+    public boolean checkValid(String a, String b){
+        int len = a.length();
+        int k =0;
+        for(int i=0;i<len;i++){
+            if(a.charAt(i)!=b.charAt(i)){
+                k++;
+            }
+            if(k>1) return false;
+        }
+        return true;
+    }
+    public int bfs(int idx, String begin, String target, String[] words){
+        Queue<Integer> que = new LinkedList<>();
+        
+        if(checkValid(begin,words[idx])){
+            que.offer(idx);
+            visited[idx]=1;
+        }
+        
         
         while(!que.isEmpty()){
-            arr now = que.poll();
-            int idx = now.idx;
-            String w = now.w;
-            
-            if(tar.equals(w)){
-                return visited[idx];
+            int now = que.poll();
+            if(words[now].equals(target)){
+                return visited[now];
             }
             
-            for(int i=1;i<=m;i++){                
-                if(validCheck(w,word[i-1])==1 && visited[i]==0){
-                    //System.out.println(word[i-1]);
-                    visited[i]=visited[idx]+1;
-                    arr arr2 = new arr(i,word[i-1]);
-                    que.offer(arr2);
+            for(int i=0;i<n;i++){
+                if(visited[i]==0 && checkValid(words[now],words[i])){
+                    visited[i]=visited[now]+1;
+                    que.offer(i);
                 }
             }
         }
