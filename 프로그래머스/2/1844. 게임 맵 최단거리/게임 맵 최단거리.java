@@ -3,67 +3,45 @@ import java.lang.*;
 import java.io.*;
 
 class Solution {
-    public int[] dx = {-1,1,0,0};
-    public int[] dy = {0,0,-1,1};
-    public int n, m;
-    public int[][] map;
-    public int[][] checked;
-
+    public int[] dx ={1,-1,0,0};
+    public int[] dy ={0,0,1,-1};
+    public int n,m;
+    public int[][] visited;
     
     public int solution(int[][] maps) {
         n = maps[0].length;
         m = maps.length;
-
-        map = maps;
-        checked = new int[m][n];
-    
         
-        int ans =bfs();
+        visited = new int[m][n];
         
-        return ans;
-        
+        return bfs(0,maps);
     }
-    public int validCheck(int nx, int ny){
-        if(nx<0 || nx>=n || ny<0 || ny>=m){
-            return -1;
-        }
-        else{
-            if(map[ny][nx]==0){
-                return -1;
-            }
-        }
-        return 1;
-    }
-    
-    public int bfs(){
-        Queue<int[]> que = new LinkedList<>();
-        que.offer(new int[] {0,0});
-        checked[0][0]=1;
+    public int bfs(int start, int[][]maps){
+        Queue<int[]>que = new LinkedList<>();
+        que.offer(new int[]{0,0});
+        visited[0][0]=1;
         
-        
-        while(!que.isEmpty()){
+        while(!que.isEmpty()){        
             int[] now = que.poll();
-            int x=now[0];
-            int y =now[1];
+            int nx = now[0];
+            int ny = now[1];
             
-            if(x==n-1 && y==m-1){
-                return checked[y][x];
+            if(nx==n-1 && ny==m-1){
+                return visited[ny][nx];
             }
             
             for(int i=0;i<4;i++){
-                int nx = x+dx[i];
-                int ny = y+dy[i];
-                
-                if(validCheck(nx,ny)==1 && checked[ny][nx]==0){
-                    que.offer(new int[] {nx,ny});
-                    checked[ny][nx]=checked[y][x]+1;
+                int x = nx+dx[i];
+                int y = ny+dy[i];
+                if(x>=0 && x<n && y>=0 && y<m && maps[y][x]==1){
+                    if(visited[y][x]==0){
+                        que.offer(new int[]{x,y});
+                        visited[y][x]=visited[ny][nx]+1;
+                    }
                 }
             }
             
         }
-        
         return -1;
-        
-        
     }
 }
