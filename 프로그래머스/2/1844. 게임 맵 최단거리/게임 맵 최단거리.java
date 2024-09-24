@@ -1,46 +1,43 @@
 import java.util.*;
-import java.lang.*;
-import java.io.*;
 
 class Solution {
-    public int[] dx ={1,-1,0,0};
-    public int[] dy ={0,0,1,-1};
+    public int[][]visited;
+    public int[] dx = {0,0,-1,1};
+    public int[] dy = {1,-1,0,0};
     public int n,m;
-    public int[][] visited;
-    
     public int solution(int[][] maps) {
         n = maps[0].length;
         m = maps.length;
-        
         visited = new int[m][n];
+        int answer = bfs(maps);
         
-        return bfs(0,maps);
+        return answer;
     }
-    public int bfs(int start, int[][]maps){
-        Queue<int[]>que = new LinkedList<>();
+    public int bfs(int[][]map){
+        Queue<int[]> que = new LinkedList<>();
         que.offer(new int[]{0,0});
         visited[0][0]=1;
+        int cnt=1;
         
-        while(!que.isEmpty()){        
+        while(!que.isEmpty()){
             int[] now = que.poll();
-            int nx = now[0];
-            int ny = now[1];
-            
-            if(nx==n-1 && ny==m-1){
-                return visited[ny][nx];
+            int x = now[0];
+            int y = now[1];
+            if(x==n-1 && y==m-1){
+                return visited[y][x];
             }
             
             for(int i=0;i<4;i++){
-                int x = nx+dx[i];
-                int y = ny+dy[i];
-                if(x>=0 && x<n && y>=0 && y<m && maps[y][x]==1){
-                    if(visited[y][x]==0){
-                        que.offer(new int[]{x,y});
-                        visited[y][x]=visited[ny][nx]+1;
+                int nx = x+dx[i];
+                int ny = y+dy[i];
+                if(nx>=0 && nx<n && ny>=0 && ny<m && map[ny][nx]==1){
+                    if(visited[ny][nx]==0){
+                        visited[ny][nx]=visited[y][x]+1;
+                        que.offer(new int[] {nx,ny});
+                        cnt++;
                     }
                 }
             }
-            
         }
         return -1;
     }
