@@ -1,53 +1,48 @@
 import java.util.*;
-import java.lang.*;
-import java.io.*;
 
 class Solution {
     public int[] visited;
     public int n;
-    public int answer;
-    
     public int solution(String begin, String target, String[] words) {
-        n = words.length;
+        n=words.length;
         visited = new int[n];
+        int min=50;
         
-        int min = 50;
-        for(int i=0;i<n;i++){
-            int ans = bfs(i,begin, target, words);
-            if(ans>0 && min>ans) min=ans;
-        }
-        if(min!=50) return min;
-        return 0;
-    }
-    public boolean checkValid(String a, String b){
-        int len = a.length();
-        int k =0;
-        for(int i=0;i<len;i++){
-            if(a.charAt(i)!=b.charAt(i)){
-                k++;
+        for(int i=0;i<words.length;i++){
+            String now = words[i];
+            if(valid(begin,now)){
+                visited = new int[n];
+                int cnt = bfs(i,target,words);
+                if(cnt<min && cnt!=0)min=cnt;
             }
-            if(k>1) return false;
         }
-        return true;
+        if(min==50) min=0;
+        return min;
     }
-    public int bfs(int idx, String begin, String target, String[] words){
-        Queue<Integer> que = new LinkedList<>();
-        
-        if(checkValid(begin,words[idx])){
-            que.offer(idx);
-            visited[idx]=1;
+    public boolean valid(String a, String b){
+        int cnt = 0;
+        for(int i =0; i<a.length();i++){
+            if(a.charAt(i)!=b.charAt(i)){
+                cnt++;
+            }
         }
-        
+        if(cnt==1) return true;
+        return false;
+    }
+    public int bfs(int b, String t, String[]w){
+        Queue<Integer> que = new LinkedList<>();
+        que.offer(b);
+        visited[b]=1;
         
         while(!que.isEmpty()){
-            int now = que.poll();
-            if(words[now].equals(target)){
-                return visited[now];
+            int nowIn = que.poll();
+            String now = w[nowIn];
+            if(now.equals(t)){
+                return visited[nowIn];
             }
-            
-            for(int i=0;i<n;i++){
-                if(visited[i]==0 && checkValid(words[now],words[i])){
-                    visited[i]=visited[now]+1;
+            for(int i=0;i<w.length;i++){
+                if(visited[i]==0 && valid(now,w[i])){
+                    visited[i]=visited[nowIn]+1;
                     que.offer(i);
                 }
             }
