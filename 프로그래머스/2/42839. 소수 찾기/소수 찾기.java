@@ -1,42 +1,61 @@
-import java.lang.*;
-import java.io.*;
 import java.util.*;
 
 class Solution {
     public HashSet<Integer> hs = new HashSet<>();
+    public int n;
+    public int[] visited;
+    public int cnt=0;
     
     public int solution(String numbers) {
-        generateNumbers("", numbers);
- 
-        int primeCount = 0;
-        for (int num : hs) {
-            if (isPrime(num)) {
-                primeCount++;
+        //가능한 수 만들기 
+        n=numbers.length();
+        visited = new int[n];
+        dfs(0,numbers,"");
+    
+        
+        //소수인지 점검 
+        isPrime();
+        return cnt;
+    }
+    public void dfs(int len, String num, String cur){
+        if(len==n){
+            return;
+        }
+        for(int i=0;i<n;i++){
+            if(visited[i]==0){
+                String now = cur+num.substring(i,i+1);
+                visited[i]=1;
+                hs.add(Integer.parseInt(now));
+                dfs(len+1,num,now);
+                visited[i]=0;
             }
         }
-        
-        return primeCount;
     }
-    private void generateNumbers(String current, String remaining) {
-        if (!current.isEmpty()) {
-            hs.add(Integer.parseInt(current)); 
+    public void isPrime(){
+        boolean flag = true;
+        for(int i : hs){
+            flag=true;
+            if(i==1 || i==0) {
+                continue;
+            }
+            if(i==2) {
+                cnt++;
+                continue;
+            }
+            if(i==3) {
+                cnt++;
+                continue;
+            }
+            
+            for(int d=2;d<=Math.sqrt(i);d++){
+                if(i%d==0){
+                    flag=false;
+                    break;
+                }
+            }
+            if(flag) {
+                cnt++;
+            }
         }
-        
-        for (int i = 0; i < remaining.length(); i++) {
-            generateNumbers(current + remaining.charAt(i), remaining.substring(0, i) 
-                            + remaining.substring(i + 1));
-        }
-    }
-    
-    private boolean isPrime(int num) {
-        if (num <= 1) return false;
-        if (num == 2) return true;
-        if (num % 2 == 0) return false;
-        
-        for (int i = 3; i <= Math.sqrt(num); i += 2) {
-            if (num % i == 0) return false;
-        }
-        
-        return true;
     }
 }
