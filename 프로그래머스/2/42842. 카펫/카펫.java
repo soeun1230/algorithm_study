@@ -1,18 +1,22 @@
 import java.util.*;
-import java.lang.*;
-import java.io.*;
 
 class Solution {
     public int[] solution(int brown, int yellow) {
         int[] answer = new int[2];
-        for(int i=(int)Math.ceil(brown/4.0)+1;i<=(brown-2)/2;i++){
-            int height = (brown-i*2)/2;
-            //System.out.println("H : "+height);
-            //System.out.println("i : "+i);
-            
-            if(yellow%(i-2)==0 && yellow/((i-2)) == height){
-                answer[0]=i;
-                answer[1]=height+2;
+        
+        for(int width = (int)Math.ceil(brown/4);width<=(brown-2)/2;width++){
+            int bh = (int)Math.ceil((brown-(width*2))/2);
+            int yw = width-2;
+            if(yellow==bh*yw){
+                if(width>=bh+2){
+                    answer[0]=width;
+                    answer[1]=bh+2;
+                }
+                else{
+                    answer[1]=width;
+                    answer[0]=bh+2;
+                }
+                break;
             }
         }
         
