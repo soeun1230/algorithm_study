@@ -1,28 +1,26 @@
-import java.lang.*;
-import java.io.*;
 import java.util.*;
 
 class Solution {
-    public int cnt=1;
-    public int[] visited;
+    public HashMap<String, Integer> hm = new HashMap<>();
     public int solution(String[][] clothes) {
-        HashMap<String, Integer> hm = new HashMap<>();
+        int answer = 1;
+        
         for(int i=0;i<clothes.length;i++){
-            if(!hm.containsKey(clothes[i][1])){
-                hm.put(clothes[i][1],1);
+            String k = clothes[i][1];
+            if(hm.containsKey(k)){
+                hm.put(k,hm.get(k)+1);
             }
             else{
-                hm.put(clothes[i][1],hm.get(clothes[i][1])+1);
+                hm.put(k,1);
             }
         }
-        ArrayList<Integer>arr = new ArrayList<>();
-        int kind =0;
+        
         for(int i : hm.values()){
-            cnt*=(i+1);
+            int[] visited = new int[i];
+            answer*=(i+1);
         }
-
         
-        
-        return cnt-1;
+        return answer-1;
     }
+
 }
