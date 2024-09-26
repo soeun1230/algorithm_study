@@ -1,42 +1,39 @@
-import java.io.*;
 import java.util.*;
 
 class Solution {
     public int solution(int[] citations) {
-        int answer = 0;
-        int max=0;
         
-        Arrays.sort(citations);
-        int n = citations.length;
+        ArrayList<Integer> arr= new ArrayList<>();
+        for(int i=0;i<citations.length;i++){
+            arr.add(citations[i]);
+        }
         
-        int min_c = citations[0];
-        int max_c = citations[n-1];
-        int s = n-1;
-        boolean flag=false;
-        for(int i =n-1;i>0;i--){
-            int now = citations[i];
-            while(now>citations[i-1]){
-                if(now<=n-i){
-                    if(max<now) max=now;
-                    flag=true;
+        Collections.sort(arr, Collections.reverseOrder());
+        int max =0;
+        boolean flag = false;
+        for(int i=0;i<arr.size()-1;i++){
+            int nowCi = arr.get(i);
+            while(nowCi>arr.get(i+1)){
+                if(nowCi<=i+1){
+                    max = nowCi;
+                    flag= true;
                     break;
                 }
-                now--;
+                nowCi--;
             }
-            if(flag){
-                break;
-            }
+            if(flag) break;
         }
         
         if(max==0){
-            for(int i=min_c;i>=0;i--){
-                if(i<=n){
-                    max=i;
-                    break;
+            int k =arr.get(arr.size()-1);
+            while(k>0){
+                if(k==arr.size()){
+                    max=k;
                 }
+                k--;
             }
         }
-        
+  
         return max;
     }
 }
