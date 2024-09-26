@@ -1,36 +1,32 @@
-import java.io.*;
 import java.util.*;
-import java.lang.*;
 
 class Solution {
     public String solution(int[] numbers) {
-        String answer = "";
+        ArrayList<Integer> arr = new ArrayList<>();
         
-        ArrayList<String> arr = new ArrayList<>();
         for(int i=0;i<numbers.length;i++){
-            arr.add(String.valueOf(numbers[i]));
+            arr.add(numbers[i]);
         }
         
-        Collections.sort(arr, new Comparator<String>(){
+        Collections.sort(arr, new Comparator<Integer>(){
             @Override
-            public int compare(String o1, String o2){
-                String order1 = o1+o2;
-                String order2 = o2+o1;
+            public int compare(Integer o1, Integer o2){
+                String com1 = String.valueOf(o1)+String.valueOf(o2);
+                String com2 = String.valueOf(o2)+String.valueOf(o1);
                 
-                return Integer.parseInt(order2)-Integer.parseInt(order1);
+                return Integer.parseInt(com2)-Integer.parseInt(com1);
             }
         });
         
-        String ch="";
-        for(int i=0;i<arr.size();i++){
-            answer+=arr.get(i);
+        String answer = "";
+        String ch ="";
+        for(int i=0;i<numbers.length;i++){
+            answer+=String.valueOf(arr.get(i));
             ch+="0";
         }
-        
         if(answer.equals(ch)){
-            return "0";
+            answer="0";
         }
-        
         return answer;
     }
 }
