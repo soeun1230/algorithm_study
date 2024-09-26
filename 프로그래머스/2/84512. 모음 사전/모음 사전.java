@@ -1,24 +1,30 @@
-import java.lang.*;
-import java.io.*;
 import java.util.*;
 
 class Solution {
-    public ArrayList<String> arr = new ArrayList<>();
-    public char[] alpha = {'A','E','I','O','U'};
+    public String[] al= {"A","E","I","O","U"};
+    public int n;
+    public ArrayList<String> arr;
+    public boolean flag;
     
     public int solution(String word) {
-        dfs(0,"");
-        int cnt = arr.indexOf(word)+1;
-        return cnt;
+        n = word.length();
+        arr = new ArrayList<>();
+        flag=false;
+        dfs("",word);
+        
+        return arr.size();
     }
-    public void dfs(int depth, String cur){
-        if(depth==5){
+    public void dfs(String cur, String w){
+        if(cur.equals(w)){
+            flag=true;
             return;
         }
-        for(char c : alpha){
-            String nw = cur+c;
-            arr.add(nw);
-            dfs(depth+1,nw);
+        for(int i=0;i<5;i++){
+            if(flag==true) return;
+            if((cur+al[i]).length()<=5){
+                arr.add(cur+al[i]);
+                dfs(cur+al[i],w);
+            }
         }
     }
 }
