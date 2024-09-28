@@ -3,66 +3,66 @@ import java.util.*;
 class Solution {
     public int[][] visited;
     public int[][] map;
-    public int n,m;
-    public int[] dx ={0,0,-1,1};
-    public int[] dy ={1,-1,0,0};
+    public int[] dx = {0,0,1,-1};
+    public int[] dy = {1,-1,0,0};
     
-    public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY){
-        int answer = 0;
-        n=rectangle[0].length;
-        m=rectangle.length;
-        
-        map= new int[102][102];
+    public int solution(int[][] rectangle, int characterX, int characterY, int itemX, int itemY) {
+        map = new int[102][102];
         visited = new int[102][102];
         
-        for(int i=0;i<m;i++){
-            int[] now = rectangle[i];
-            int x1 = now[0]*2;
-            int y1 = now[1]*2;
-            int x2 = now[2]*2;
-            int y2 = now[3]*2;
+        int n = rectangle.length;
+        
+        for(int i=0;i<n;i++){
+            int x1 = rectangle[i][0]*2;
+            int y1 = rectangle[i][1]*2;
+            int x2 = rectangle[i][2]*2;
+            int y2 = rectangle[i][3]*2;
             
             for(int x=x1;x<=x2;x++){
-                if(map[y1][x]!=2) map[y1][x]=1;
-                if(map[y2][x]!=2) map[y2][x]=1;
+                if(map[x][y1]!=1){
+                    map[x][y1]=2;
+                }
+                if(map[x][y2]!=1){
+                    map[x][y2]=2;
+                }
             }
             for(int y=y1;y<=y2;y++){
-                if(map[y][x1]!=2) map[y][x1]=1;
-                if(map[y][x2]!=2) map[y][x2]=1;
+                if(map[x1][y]!=1){
+                    map[x1][y]=2;
+                }
+                if(map[x2][y]!=1){
+                    map[x2][y]=2;
+                }
             }
+            
             for(int x=x1+1;x<x2;x++){
                 for(int y=y1+1;y<y2;y++){
-                    map[y][x]=2;
+                    map[x][y]=1;
                 }
             }
         }
+        int min = Integer.MAX_VALUE;
+        int ch =bfs(characterX*2, characterY*2, itemX*2, itemY*2);
         
-        answer = bfs(characterX*2, characterY*2, itemX*2, itemY*2)/2;
-        
-        return answer;
+        if(min>ch) min = ch;
+        return min/2;
     }
-    public int bfs(int sx, int sy, int tx, int ty){
+    public int bfs(int sx,int sy, int ex, int ey){
         Queue<int[]> que = new LinkedList<>();
         que.offer(new int[]{sx,sy});
-        visited[sy][sx]=1;
+        visited[sx][sy]=1;
         
         while(!que.isEmpty()){
-            int[] now = que.poll();
+            int[] now =que.poll();
             int x = now[0];
             int y = now[1];
-            
-            if(x==tx && y==ty){
-                return visited[y][x];
-            }
-            
+            if(x==ex && y==ey) return visited[x][y];
             for(int i=0;i<4;i++){
                 int nx = x+dx[i];
                 int ny = y+dy[i];
-                if(nx>=1 && nx<=map[0].length &&  ny>=1 && ny<=map.length && map[ny][nx]==1){
-                    if(visited[ny][nx]==0){
-                        visited[ny][nx]=visited[y][x]+1;
-                        que.offer(new int[]{nx,ny});
-                    }
+                if(nx>0 && nx<102 &&ny>0&&ny<102 && visited[nx][ny]==0 && map[nx][ny]==2){
+                    visited[nx][ny]=visited[x][y]+1;
+                    que.offer(new int[]{nx,ny});
                 }
             }
         }
