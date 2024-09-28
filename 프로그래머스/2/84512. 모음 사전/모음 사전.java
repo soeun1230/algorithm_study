@@ -1,30 +1,31 @@
 import java.util.*;
 
 class Solution {
-    public String[] al= {"A","E","I","O","U"};
-    public int n;
-    public ArrayList<String> arr;
-    public boolean flag;
+    public String[] w = {"A","E","I","O","U"};
+    public ArrayList<String> arr = new ArrayList<>();
     
     public int solution(String word) {
-        n = word.length();
-        arr = new ArrayList<>();
-        flag=false;
-        dfs("",word);
+        int answer = 0;
         
-        return arr.size();
+        dfs("",word);
+        answer = arr.size();
+        
+        return answer;
     }
-    public void dfs(String cur, String w){
-        if(cur.equals(w)){
-            flag=true;
-            return;
+    public boolean dfs(String cur, String tar){
+        if(cur.equals(tar)){
+            return true;
         }
         for(int i=0;i<5;i++){
-            if(flag==true) return;
-            if((cur+al[i]).length()<=5){
-                arr.add(cur+al[i]);
-                dfs(cur+al[i],w);
+            
+            if((cur+w[i]).length()<=5){
+                arr.add(cur+w[i]);
+                if(dfs(cur+w[i],tar)){
+                    return true;
+                }
             }
+            
         }
+        return false;
     }
 }
