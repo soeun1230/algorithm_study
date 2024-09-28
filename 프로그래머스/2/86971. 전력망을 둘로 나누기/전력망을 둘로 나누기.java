@@ -1,45 +1,44 @@
 import java.util.*;
 
 class Solution {
-    public ArrayList<Integer> arr1;
-    public int min=100;
+    public ArrayList<Integer> arr = new ArrayList<>();
     public int[] visited;
+    public int num;
+    public int min = Integer.MAX_VALUE;
     
     public int solution(int n, int[][] wires) {
-        visited = new int[wires.length];
-        arr1=new ArrayList<>();
-        //끊을 전선
-        for(int i=0;i<wires.length;i++){
-            int[] cut =wires[i];
-            visited = new int[wires.length];
-            arr1.clear();
+        num=n-1;
+        
+        for(int i=0;i<num;i++){
+            visited = new int[n];
             visited[i]=1;
-            arr1.add(cut[0]);
-            dfs(cut[0],wires);
-            //System.out.print(arr1.size()+" ");
-            int k = n-(arr1.size());
-            int dif = Math.abs(arr1.size()-k);
-            if(dif<min) min=dif;
+            arr.add(wires[i][0]);
+            dfs(i,wires[i][0],wires);
+            
+            // for(int j=0;j<arr.size();j++){
+            //     System.out.print(arr.get(j)+" ");
+            // }
+            // System.out.println();
+            
+            int now = Math.abs((n-arr.size())-arr.size());
+            if(min>now) min=now;
+            arr.clear();
         }
         
         return min;
     }
-    public void dfs(int cur, int[][] wires){
-        for(int i=0;i<wires.length;i++){
+    public void dfs(int ind, int next, int[][] wire){
+        for(int i=0;i<num;i++){
             if(visited[i]==0){
-                if(wires[i][0]==cur){
+                if(wire[i][0]==next){
                     visited[i]=1;
-                    arr1.add(wires[i][0]);
-                    dfs(wires[i][1],wires);
-                    //visited[i]=0;
-                    //arr1.remove(arr1.size()-1);
+                    arr.add(wire[i][1]);
+                    dfs(i,wire[i][1],wire);
                 }
-                else if(wires[i][1]==cur){
+                else if(wire[i][1]==next){
                     visited[i]=1;
-                    arr1.add(wires[i][1]);
-                    dfs(wires[i][0],wires);
-                    //visited[i]=0;
-                    //arr1.remove(arr1.size()-1);
+                    arr.add(wire[i][0]);
+                    dfs(i,wire[i][0],wire);
                 }
             }
         }
