@@ -3,50 +3,50 @@ import java.util.*;
 class Solution {
     public int[] visited;
     public int n;
+    public int len;
+    public int min=Integer.MAX_VALUE;
+    
     public int solution(String begin, String target, String[] words) {
         n=words.length;
-        visited = new int[n];
-        int min=50;
+        len = words[0].length();
         
-        for(int i=0;i<words.length;i++){
-            String now = words[i];
-            if(valid(begin,now)){
+        for(int i=0;i<n;i++){
+            if(isValid(begin,words[i])){
                 visited = new int[n];
-                int cnt = bfs(i,target,words);
-                if(cnt<min && cnt!=0)min=cnt;
+                int now =bfs(i,words, target);
+                if(min>now) min=now;
             }
         }
-        if(min==50) min=0;
+        if(min==Integer.MAX_VALUE) return 0;
         return min;
     }
-    public boolean valid(String a, String b){
-        int cnt = 0;
-        for(int i =0; i<a.length();i++){
-            if(a.charAt(i)!=b.charAt(i)){
-                cnt++;
-            }
-        }
-        if(cnt==1) return true;
-        return false;
-    }
-    public int bfs(int b, String t, String[]w){
+    public int bfs(int s, String[] word, String tar){
         Queue<Integer> que = new LinkedList<>();
-        que.offer(b);
-        visited[b]=1;
+        que.offer(s);
+        visited[s]=1;
         
         while(!que.isEmpty()){
-            int nowIn = que.poll();
-            String now = w[nowIn];
-            if(now.equals(t)){
-                return visited[nowIn];
+            int now = que.poll();
+            if(word[now].equals(tar)){
+                return visited[now];
             }
-            for(int i=0;i<w.length;i++){
-                if(visited[i]==0 && valid(now,w[i])){
-                    visited[i]=visited[nowIn]+1;
+            for(int i=0;i<n;i++){
+                if(visited[i]==0 && isValid(word[now],word[i])){
+                    visited[i]=visited[now]+1;
                     que.offer(i);
                 }
             }
         }
-        return 0;
+        return Integer.MAX_VALUE;     
+    }
+    public boolean isValid(String a, String b){
+        int cnt =0;
+        for(int i=0;i<len;i++){
+            if(a.charAt(i)!=b.charAt(i)){
+                cnt++;
+                if(cnt>1) return false;
+            }
+        }
+        return true;
     }
 }
